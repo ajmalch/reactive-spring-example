@@ -25,6 +25,7 @@
 /.nb-gradle/
 /mvnw.cmd
 /mvnw
+/.mvn/
 .DS_Store
 reactive-spring-service/.DS_Store
 reactive-spring-service/src/.DS_Store
