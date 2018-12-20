@@ -1,0 +1,10 @@
+server:
+  port: 8081
+spring:
+  redis:
+    host: localhost
+    port: 6379
+  cloud:
+    gateway:
+      redis-rate-limiter:
+        remaining-header: Reamianing-Requests
