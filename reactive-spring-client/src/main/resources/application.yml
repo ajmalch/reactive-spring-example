@@ -7,4 +7,4 @@ spring:
   cloud:
     gateway:
       redis-rate-limiter:
-        remaining-header: Reamianing-Requests
+        remaining-header: Remaining-Requests

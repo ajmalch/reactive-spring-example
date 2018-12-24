@@ -55,7 +55,16 @@ public class ReactiveSpringClientApplication {
                                         config.setRateLimiter(redisRateLimiter()))
                         )
                         .uri("http://localhost:8080"))
-                .build();
+                .route(rSpec -> rSpec.host("*.maliha.aqila")
+                        .and().path("/proxyStream")
+                        .filters(fSpec -> fSpec.setPath("/usersStream")
+                                .addResponseHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                                .requestRateLimiter(config ->
+                                        config.setRateLimiter(redisRateLimiter()))
+                        )
+                        .uri("http://localhost:8080"))
+                .
+                        build();
     }
 
     public static void main(String[] args) {
