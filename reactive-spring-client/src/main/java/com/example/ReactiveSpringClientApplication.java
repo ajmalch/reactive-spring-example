@@ -16,6 +16,10 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @SpringBootApplication
 public class ReactiveSpringClientApplication {
 
+    public static void main(String[] args) {
+        SpringApplication.run(ReactiveSpringClientApplication.class, args);
+    }
+
     @Bean
     MapReactiveUserDetailsService authentication() {
         UserDetails ajmal = User.withDefaultPasswordEncoder()
@@ -65,10 +69,6 @@ public class ReactiveSpringClientApplication {
                         .uri("http://localhost:8080"))
                 .
                         build();
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(ReactiveSpringClientApplication.class, args);
     }
 
 }
