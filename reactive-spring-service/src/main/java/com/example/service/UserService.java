@@ -31,11 +31,14 @@ public class UserService {
     //This is to simulate a one second delay
     public Flux<User> getAllUsersStream() {
 
+        return Flux.interval(Duration.ofSeconds(1)).zipWith(userRepository.findAll()).map(Tuple2::getT2);
 
-        Flux<Long> interval = Flux.interval(Duration.ofSeconds(1));
-        Flux<User> userFlux = userRepository.findAll();
+    }
 
-        return Flux.zip(interval, userFlux).map(Tuple2::getT2);
+    public Mono<User> create(Mono<User> user) {
+
+        return user.doOnNext(userRepository::save);
+
 
     }
 }
