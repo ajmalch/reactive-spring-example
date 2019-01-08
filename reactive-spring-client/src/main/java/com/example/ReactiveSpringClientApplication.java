@@ -7,6 +7,7 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
@@ -35,7 +36,8 @@ public class ReactiveSpringClientApplication {
 
         http.csrf().disable();
         http.httpBasic();
-        http.authorizeExchange().pathMatchers("/proxy").authenticated()
+        http.authorizeExchange().pathMatchers("/proxy*").authenticated()
+                .pathMatchers("/userInsertProxy").authenticated()
                 .anyExchange().permitAll();
 
         return http.build();
@@ -53,6 +55,7 @@ public class ReactiveSpringClientApplication {
                 .routes()
                 .route(rSpec -> rSpec.host("*.maliha.aqila")
                         .and().path("/proxy")
+                        .and().method(HttpMethod.GET)
                         .filters(fSpec -> fSpec.setPath("/users")
                                 .addResponseHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
                                 .requestRateLimiter(config ->
@@ -67,7 +70,17 @@ public class ReactiveSpringClientApplication {
                                         config.setRateLimiter(redisRateLimiter()))
                         )
                         .uri("http://localhost:8080"))
-                .
+                .route(rSpec -> rSpec.host("ajmal.com")
+                        .and().path("/userInsertProxy")
+                        .and().method(HttpMethod.POST)
+                        .filters(fSpec -> fSpec
+                                .setPath("/users")
+                                .addResponseHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+                                .requestRateLimiter(config ->
+                                        config.setRateLimiter(redisRateLimiter()))
+                        )
+                        .uri("http://localhost:8080")
+                ).
                         build();
     }
 

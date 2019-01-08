@@ -9,9 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
+
+import java.net.URI;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
@@ -53,12 +56,15 @@ public class ReactiveSpringServiceApplication {
                                         , User.class))
                 .andRoute(POST("/users"),
                         serverRequest ->
-                                created(serverRequest.uri()).body(
-                                        userService.create(
-                                                serverRequest
-                                                        .bodyToMono(String.class)
-                                                        .map(name -> new User(null, name)))
-                                        , User.class)
+                                serverRequest.bodyToMono(String.class)
+                                        .map(name -> new User(null, name))
+                                        .doOnNext(userService::create)
+                                        .flatMap(user ->
+                                                created(
+                                                        URI.create(
+                                                                serverRequest.uri().toString() + "/" + user.getId()))
+                                                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                                        .build())
 
 
                 );

@@ -35,9 +35,9 @@ public class UserService {
 
     }
 
-    public Mono<User> create(Mono<User> user) {
+    public Mono<User> create(User user) {
 
-        return user.doOnNext(userRepository::save);
+        return userRepository.save(user);
 
 
     }
