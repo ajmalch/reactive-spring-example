@@ -3,7 +3,6 @@ package com.example;
 import com.example.model.User;
 import com.example.repository.UserRepository;
 import com.example.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -25,8 +24,12 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @SpringBootApplication
 public class ReactiveSpringServiceApplication {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public ReactiveSpringServiceApplication(UserRepository userRepository) {
+
+        this.userRepository = userRepository;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(ReactiveSpringServiceApplication.class, args);
@@ -58,7 +61,7 @@ public class ReactiveSpringServiceApplication {
                         serverRequest ->
                                 serverRequest.bodyToMono(String.class)
                                         .map(name -> new User(null, name))
-                                        .doOnNext(userService::create)
+                                        .flatMap(userService::create)
                                         .flatMap(user ->
                                                 created(
                                                         URI.create(

@@ -6,4 +6,4 @@ spring:
   webflux:
     hiddenmethod:
       filter:
-        enabled: false
+        enabled: true

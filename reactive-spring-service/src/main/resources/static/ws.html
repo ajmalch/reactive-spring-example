@@ -1,0 +1,18 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>User notification Client</title>
+</head>
+
+<body>
+<script>
+
+    var socket = new WebSocket('ws://localhost:8080/ws/users');
+    socket.addEventListener("message", function (ev) {
+        window.alert('message from server ' + ev.data);
+    });
+</script>
+
+</body>
+
+</html>
