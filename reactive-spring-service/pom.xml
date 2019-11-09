@@ -8,16 +8,19 @@
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>..</relativePath> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
     <artifactId>reactive-spring-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>reactive-spring-service</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Demo project for Reactive Spring Boot Service</description>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator</artifactId>
         </dependency>
     </dependencies>
 

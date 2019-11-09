@@ -5,10 +5,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest
-public class ReactiveSpringServiceApplicationTests {
+class ReactiveSpringServiceApplicationTests {
 
     @Test
-    public void contextLoads() {
+    void contextLoads() {
     }
 
 }

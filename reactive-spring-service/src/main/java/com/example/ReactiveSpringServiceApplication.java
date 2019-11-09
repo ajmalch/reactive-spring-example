@@ -43,7 +43,7 @@ public class ReactiveSpringServiceApplication {
                                                 created(
                                                         URI.create(
                                                                 serverRequest.uri().toString() + "/" + user.getId()))
-                                                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                                        .contentType(MediaType.APPLICATION_JSON)
                                                         .build())
 
 

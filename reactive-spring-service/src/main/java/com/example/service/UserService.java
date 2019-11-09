@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.event.UserCreatedEvent;
 import com.example.model.User;
 import com.example.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -12,16 +13,12 @@ import reactor.util.function.Tuple2;
 import java.time.Duration;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
 
     private final ApplicationEventPublisher publisher;
-
-    public UserService(UserRepository userRepository, ApplicationEventPublisher publisher) {
-        this.userRepository = userRepository;
-        this.publisher = publisher;
-    }
 
     public Mono<User> getUser(String id) {
 
@@ -45,6 +42,20 @@ public class UserService {
 
         return userRepository.save(user).doOnSuccess(u -> publisher.publishEvent(new UserCreatedEvent(u)));
 
-
     }
+
+    Mono<User> update(String id, String name) {
+
+        return userRepository.findById(id)
+                .map(user -> new User(user.getId(), name))
+                .flatMap(userRepository::save);
+    }
+
+    Mono<User> delete(String id) {
+
+        return userRepository.findById(id)
+                .flatMap(user -> userRepository.deleteById(user.getId())
+                        .thenReturn(user));
+    }
+
 }

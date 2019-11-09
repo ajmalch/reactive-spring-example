@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.model.User;
 import com.example.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +12,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping(value = "/users")
     public Flux<User> getUsers() {
