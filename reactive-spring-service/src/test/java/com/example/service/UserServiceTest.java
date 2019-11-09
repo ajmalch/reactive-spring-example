@@ -36,7 +36,7 @@ public class UserServiceTest {
     @Test
     void getAllUsers() {
 
-        log.info("Testing UserService.getAllUsers");
+        log.debug("Testing UserService.getAllUsers");
 
         final var saved = userRepository.saveAll(
                 Flux.just(
@@ -63,7 +63,7 @@ public class UserServiceTest {
     @Test
     void create() {
 
-        log.info("Testing UserService.create");
+        log.debug("Testing UserService.create");
 
         Mono<User> userMono = this.userService.create(new User(null, "Test"));
 
@@ -75,6 +75,8 @@ public class UserServiceTest {
 
     @Test
     void update() {
+
+        log.debug("Testing UserService.update");
 
         Mono<User> updated = userService.create(new User(null, "Ajmal"))
                 .flatMap(user -> userService.update(user.getId(), "Maliha"))
@@ -89,6 +91,8 @@ public class UserServiceTest {
 
     @Test
     void delete() {
+
+        log.debug("Testing UserService.delete");
 
         final var user = userService.create(new User(null, "Ajmal"))
                 .block();

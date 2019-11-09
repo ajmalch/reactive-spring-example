@@ -2,6 +2,7 @@ package com.example.configuration;
 
 import com.example.model.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Profile;
@@ -12,12 +13,15 @@ import reactor.core.publisher.Flux;
 @Component
 @RequiredArgsConstructor
 @Profile("demo")
+@Slf4j
 public class SampleDataInitializer implements ApplicationListener<ApplicationReadyEvent> {
 
     private final ReactiveMongoRepository<User, String> userRepository;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+
+        log.debug("Initializing sample data");
 
         userRepository.deleteAll()
                 .thenMany(
