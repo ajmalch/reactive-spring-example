@@ -7,22 +7,25 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
+import javax.validation.constraints.NotBlank;
 import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class UserService {
 
     private final UserRepository userRepository;
 
     private final ApplicationEventPublisher publisher;
 
-    public Mono<User> getUser(String id) {
+    public Mono<User> getUser(@NotBlank String id) {
 
         log.debug("UserService.getUser");
 
@@ -54,7 +57,7 @@ public class UserService {
 
     }
 
-    Mono<User> update(String id, String name) {
+    Mono<User> update(String id, @NotBlank String name) {
 
         log.debug("UserService.update");
 
