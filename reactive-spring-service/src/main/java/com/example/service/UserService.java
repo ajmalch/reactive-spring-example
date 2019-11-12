@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.time.Duration;
 
@@ -49,7 +50,7 @@ public class UserService {
 
     }
 
-    public Mono<User> create(User user) {
+    public Mono<User> create(@Valid User user) {
 
         log.debug("UserService.create");
 
@@ -57,7 +58,7 @@ public class UserService {
 
     }
 
-    Mono<User> update(String id, @NotBlank String name) {
+    public Mono<User> update(String id, @NotBlank String name) {
 
         log.debug("UserService.update");
 
@@ -66,7 +67,7 @@ public class UserService {
                 .flatMap(userRepository::save);
     }
 
-    Mono<User> delete(String id) {
+    public Mono<User> delete(String id) {
 
         log.debug("UserService.delete");
 
