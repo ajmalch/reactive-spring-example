@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.configuration.ResourceNotFoundException;
 import com.example.event.UserCreatedEvent;
 import com.example.model.User;
 import com.example.repository.UserRepository;
@@ -30,7 +31,9 @@ public class UserService {
 
         log.debug("UserService.getUser");
 
-        return userRepository.findById(id);
+        return userRepository.findById(id)
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("User with id " + id + " not found")));
+
     }
 
     public Flux<User> getAllUsers() {
@@ -46,7 +49,9 @@ public class UserService {
 
         log.debug("UserService.getAllUsersStream");
 
-        return Flux.interval(Duration.ofSeconds(1)).zipWith(userRepository.findAll()).map(Tuple2::getT2);
+        return Flux.interval(Duration.ofSeconds(1))
+                .zipWith(userRepository.findAll())
+                .map(Tuple2::getT2);
 
     }
 
@@ -54,15 +59,16 @@ public class UserService {
 
         log.debug("UserService.create");
 
-        return userRepository.save(user).doOnSuccess(u -> publisher.publishEvent(new UserCreatedEvent(u)));
+        return userRepository.save(user)
+                .doOnSuccess(u -> publisher.publishEvent(new UserCreatedEvent(u)));
 
     }
 
-    public Mono<User> update(String id, @NotBlank String name) {
+    public Mono<User> update(@NotBlank String id, @NotBlank String name) {
 
         log.debug("UserService.update");
 
-        return userRepository.findById(id)
+        return this.getUser(id)
                 .map(user -> new User(user.getId(), name))
                 .flatMap(userRepository::save);
     }

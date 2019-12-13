@@ -17,7 +17,7 @@ public class User {
     @Id
     private String id;
 
-    @NotNull
+    @NotNull(message = "User Name should not be null")
     private String name;
 
 

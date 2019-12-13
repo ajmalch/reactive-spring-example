@@ -1,6 +1,7 @@
 package com.example.service;
 
 
+import com.example.configuration.ResourceNotFoundException;
 import com.example.model.User;
 import com.example.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -102,7 +103,7 @@ public class UserServiceTest {
 
         //Verify that no user returned as we have already deleted the user
         StepVerifier.create(deletedUser)
-                .verifyComplete();
+                .verifyError(ResourceNotFoundException.class);
 
     }
 }

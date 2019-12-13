@@ -16,9 +16,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.reactive.function.server.ServerResponse.created;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
-@RequiredArgsConstructor
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class UserHandler {
 
     private final UserService userService;
@@ -46,20 +46,20 @@ public class UserHandler {
 
         log.debug("UserHandler.updateById");
 
-        final var userFlux = serverRequest.bodyToFlux(User.class)
+        final var updatedUser = serverRequest.bodyToMono(User.class)
                 .flatMap(user -> userService.update(id(serverRequest), user.getName()));
-        return defaultReadResponse(userFlux);
+        return defaultReadResponse(updatedUser);
     }
 
     Mono<ServerResponse> create(ServerRequest serverRequest) {
 
-        final var userFlux = serverRequest.bodyToFlux(User.class)
-                .flatMap(userService::create);
+        log.debug("UserHandler.create");
 
-        return Mono.from(userFlux)
+        final var createdUser = serverRequest.bodyToMono(User.class)
+                .flatMap(userService::create);
+        return Mono.from(createdUser)
                 .flatMap(user -> created(URI.create("/users/" + user.getId())).contentType(APPLICATION_JSON)
                         .build());
-
 
     }
 
@@ -72,4 +72,6 @@ public class UserHandler {
     private String id(ServerRequest serverRequest) {
         return serverRequest.pathVariable("id");
     }
+
+
 }
