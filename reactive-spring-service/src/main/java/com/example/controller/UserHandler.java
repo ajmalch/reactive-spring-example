@@ -1,4 +1,4 @@
-package com.example;
+package com.example.controller;
 
 import com.example.model.User;
 import com.example.service.UserService;
@@ -36,10 +36,15 @@ public class UserHandler {
         return defaultReadResponse(userService.getUser(id(serverRequest)));
     }
 
-    Mono<ServerResponse> deleteById(ServerRequest serverRequest) {
+    Mono<ServerResponse> create(ServerRequest serverRequest) {
 
-        log.debug("UserHandler.deleteById");
-        return defaultReadResponse(userService.delete(id(serverRequest)));
+        log.debug("UserHandler.create");
+
+        final var createdUser = serverRequest.bodyToMono(User.class)
+                .flatMap(userService::create);
+        return Mono.from(createdUser)
+                .flatMap(user -> created(URI.create("/users/" + user.getId())).contentType(APPLICATION_JSON)
+                        .build());
     }
 
     Mono<ServerResponse> updateById(ServerRequest serverRequest) {
@@ -51,16 +56,10 @@ public class UserHandler {
         return defaultReadResponse(updatedUser);
     }
 
-    Mono<ServerResponse> create(ServerRequest serverRequest) {
+    Mono<ServerResponse> deleteById(ServerRequest serverRequest) {
 
-        log.debug("UserHandler.create");
-
-        final var createdUser = serverRequest.bodyToMono(User.class)
-                .flatMap(userService::create);
-        return Mono.from(createdUser)
-                .flatMap(user -> created(URI.create("/users/" + user.getId())).contentType(APPLICATION_JSON)
-                        .build());
-
+        log.debug("UserHandler.deleteById");
+        return defaultReadResponse(userService.delete(id(serverRequest)));
     }
 
     private Mono<ServerResponse> defaultReadResponse(Publisher<User> users) {
@@ -72,6 +71,5 @@ public class UserHandler {
     private String id(ServerRequest serverRequest) {
         return serverRequest.pathVariable("id");
     }
-
 
 }

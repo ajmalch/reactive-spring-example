@@ -1,7 +1,7 @@
 package com.example.service;
 
-import com.example.configuration.ResourceNotFoundException;
 import com.example.event.UserCreatedEvent;
+import com.example.exception.ResourceNotFoundException;
 import com.example.model.User;
 import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +69,10 @@ public class UserService {
         log.debug("UserService.update");
 
         return this.getUser(id)
-                .map(user -> new User(user.getId(), name))
+                .map(user -> {
+                    user.setName(name);
+                    return user;
+                })
                 .flatMap(userRepository::save);
     }
 

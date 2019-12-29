@@ -1,7 +1,7 @@
 package com.example.service;
 
 
-import com.example.configuration.ResourceNotFoundException;
+import com.example.exception.ResourceNotFoundException;
 import com.example.model.User;
 import com.example.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
