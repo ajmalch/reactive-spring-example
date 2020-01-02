@@ -7,6 +7,20 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+  security:
+    oauth2:
+      client:
+        registration:
+          okta:
+            client-id: 0oaj0eykwtEbPQhWm0h7
+            client-secret: zryK4T4yY5JLk1MgFuktEJqeIQXum6FM0xJg3C2F
+        provider:
+          okta:
+            issuer-uri: https://dev-904410.oktapreview.com/oauth2/default
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-904410.oktapreview.com/oauth2/default
+
 management:
   endpoints:
     web:
