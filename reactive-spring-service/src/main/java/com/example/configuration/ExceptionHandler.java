@@ -66,17 +66,18 @@ public class ExceptionHandler extends AbstractErrorWebExceptionHandler {
         return error instanceof ResponseStatusException ? ((ResponseStatusException) error).getStatus() : responseStatusAnnotation.getValue("code", HttpStatus.class)
                 .orElse(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-}
 
-@AllArgsConstructor
-@Data
-class ExceptionResponseMessage {
+    @AllArgsConstructor
+    @Data
+    private static class ExceptionResponseMessage {
 
-    private Instant time;
-    private int status;
-    private String error;
-    private String exception;
-    private String message;
+        private Instant time;
+        private int status;
+        private String error;
+        private String exception;
+        private String message;
+
+    }
 
 }
 
